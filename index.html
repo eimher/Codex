@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen de Clean Code</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+        .example { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<h1>Conceptos principales de "Clean Code"</h1>
+<div id="content"></div>
+
+<script>
+/*
+Este sencillo programa resume algunos conceptos esenciales del libro
+"Clean Code" de Robert C. Martin.
+Cada concepto se acompaña de un ejemplo de cómo *no* hacerlo y un ejemplo
+de cómo sí implementarlo correctamente.
+*/
+
+const conceptos = [
+    {
+        titulo: "Nombres significativos",
+        resumen: "Elige nombres descriptivos y evita abreviaturas confusas.",
+        malo: `function d(a, b) { return a - b; }`,
+        bueno: `function calcularDiferencia(precioActual, precioAnterior) {\n    return precioActual - precioAnterior;\n}`
+    },
+    {
+        titulo: "Funciones pequeñas",
+        resumen: "Las funciones deben ser cortas y realizar una sola tarea.",
+        malo: `function procesar(usuario) {\n    if (!usuario.activo) {\n        usuario.activo = true;\n        guardar(usuario);\n        enviarCorreo(usuario.email);\n    } else {\n        console.log('Ya activo');\n    }\n}`,
+        bueno: `function activarUsuario(usuario) {\n    if (!usuario.activo) {\n        usuario.activo = true;\n        guardar(usuario);\n        notificarActivacion(usuario.email);\n    }\n}\n\nfunction notificarActivacion(email) {\n    enviarCorreo(email);\n}`
+    },
+    {
+        titulo: "Evitar comentarios innecesarios",
+        resumen: "El código debe ser lo suficientemente claro para minimizar comentarios redundantes.",
+        malo: `// incrementa i en 1\nfor (let i = 0; i < 10; i++) {\n    // imprime i\n    console.log(i);\n}`,
+        bueno: `for (let numero = 0; numero < 10; numero++) {\n    console.log(numero);\n}`
+    },
+    {
+        titulo: "Manejo de errores",
+        resumen: "Usa excepciones en lugar de códigos de error e informa las fallas de manera clara.",
+        malo: `function obtenerUsuario(id) {\n    const usuario = baseDeDatos[id];\n    if (!usuario) {\n        return null; // error silencioso\n    }\n    return usuario;\n}`,
+        bueno: `function obtenerUsuario(id) {\n    const usuario = baseDeDatos[id];\n    if (!usuario) {\n        throw new Error('Usuario no encontrado');\n    }\n    return usuario;\n}`
+    }
+];
+
+const contenedor = document.getElementById('content');
+
+conceptos.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'example';
+    div.innerHTML = `
+        <h2>${c.titulo}</h2>
+        <p>${c.resumen}</p>
+        <h3>Ejemplo incorrecto:</h3>
+        <pre>${c.malo}</pre>
+        <h3>Ejemplo correcto:</h3>
+        <pre>${c.bueno}</pre>
+    `;
+    contenedor.appendChild(div);
+});
+</script>
+</body>
+</html>
